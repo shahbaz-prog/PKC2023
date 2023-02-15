@@ -44,25 +44,23 @@ if uploaded_file is not None:
         return csv
     df = load_csv()
     pr = ProfileReport(df, explorative=True)
-    st.header("**Input DF**")
     st.write(df)
     st.write("---")
     st.header("**Profiling report with pandas**")
     st_profile_report(pr)
 else:
-    st.info("waiting for csv file")
-    if st.button("Press to use Example Dataset"):
-        def load_data():
-            a = pd.DataFrame(np.random.rand(100, 5),
+    @st.cache
+    def load_data():
+        a = pd.DataFrame(np.random.rand(100, 5),
                              columns=["age", "banana", "Codenics", "duck", "Ear"])
-            return a
-        df = load_data()
-        pr = ProfileReport(df, explorative=True)
-        st.header("**Input DF**")
-        st.write(df)
-        st.write("---")
-        st.header("**Profiling report with pandas**")
-        st_profile_report(pr)
+        return a
+    df = load_data()
+    pr = ProfileReport(df, explorative=True)
+    st.header("**Input DF**")
+    st.write(df)
+    st.write("---")
+    st.header("**Profiling report with pandas**")
+    st_profile_report(pr)
 
 
 # Insert User Input Parameters
@@ -303,10 +301,9 @@ x1 = X_projected[:, 0]
 # second principal component of the data 1 means second column
 x2 = X_projected[:, 1]
 fig = plt.figure()
-plt.scatter(df1['sex'], df1['age'], c=df1['output'], alpha=0.8,
-            cmap='autumn', edgecolors='crimson', s=60)
-plt.xlabel('Sex', fontsize=15, color='red', fontweight='bold')
-plt.ylabel('Age', fontsize=15, color='red', fontweight='bold')
+plt.scatter(x1, x2, c=y, alpha=0.8, cmap='autumn', edgecolors='crimson', s=60)
+plt.xlabel('Age', fontsize=15, color='red', fontweight='bold')
+plt.ylabel('Sex', fontsize=15, color='red', fontweight='bold')
 plt.colorbar()
 st.pyplot(fig)
 # Age vs Chol
